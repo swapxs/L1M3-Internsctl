@@ -1,0 +1,86 @@
+.TH internsctl 1 "February 2025" "internsctl v0.1.0" "User Commands"
+.SH NAME
+internsctl \- a custom linux command for sysadmin operations
+.SH SYNOPSIS
+.B internsctl
+[\fICOMMAND\fR] [\fIOPTIONS\fR]
+.SH DESCRIPTION
+.B internsctl
+is a tool to manage CPU and memory information, create and list users, and get file information.
+
+.SH COMMANDS
+.TP
+.B cpu getinfo
+Display CPU information (simplified output).
+.TP
+.B memory getinfo
+Display memory information (equivalent to free).
+.TP
+.B user create \fINAME\fR
+Create a new user with the specified name.
+.TP
+.B user list [\-\-sudo\-only]
+List all users or only those with sudo privileges.
+.TP
+.B file getinfo [\fIOPTIONS\fR] \fIFILE\-NAME\fR
+Get information about a file.
+
+.SH OPTIONS FOR 'file getinfo'
+.TP
+.BR \-\-size ", " \-s
+Show file size.
+.TP
+.BR \-\-permissions ", " \-p
+Show file permissions.
+.TP
+.BR \-\-owner ", " \-o
+Show file owner.
+.TP
+.BR \-\-last\-modified ", " \-m
+Show last modified time.
+
+.SH OTHER OPTIONS
+.TP
+.BR \-\-help
+Show this help message.
+.TP
+.BR \-\-version
+Show command version.
+
+.SH EXAMPLES
+.TP
+.B internsctl cpu getinfo
+Display CPU information.
+.TP
+.B internsctl memory getinfo
+Display memory information.
+.TP
+.B internsctl user create alice
+Create a new user named "alice".
+.TP
+.B internsctl user list
+List all users.
+.TP
+.B internsctl user list \-\-sudo\-only
+List users with sudo privileges.
+.TP
+.B internsctl file getinfo \-\-size myfile.txt
+Show the size of "myfile.txt".
+.TP
+.B internsctl file getinfo \-\-permissions myfile.txt
+Show the permissions of "myfile.txt".
+.TP
+.B internsctl file getinfo \-\-owner myfile.txt
+Show the owner of "myfile.txt".
+.TP
+.B internsctl file getinfo \-\-last\-modified myfile.txt
+Show the last modified time of "myfile.txt".
+
+.SH AUTHOR
+Written by Swapnil Bhowmik
+
+.SH BUGS
+Report bugs to swapnil.bhowmik@xenonstack.com
+
+.SH COPYRIGHT
+This is free software; you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law.

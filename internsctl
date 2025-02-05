@@ -1,0 +1,113 @@
+#!/bin/sh
+
+VERSION="v0.1.0"
+FILE_OPTS=""
+FILE_PATH=""
+
+help() {
+    cat <<EOF
+Usage: internsctl [command] [options]
+
+Commands:
+  cpu getinfo                        Display CPU information
+  memory getinfo                     Display memory information
+  user create <name>                 Create a new user. (Won't run without sudo)
+  user list [--sudo-only]            List all users or only those with sudo privileges
+  file getinfo <file-name> [options] Get information about a file
+
+Options:
+  --size, -s                         Show file size
+  --permissions, -p                  Show file permissions
+  --owner, -o                        Show file owner
+  --last-modified, -m                Show last modified time
+
+Other:
+  --help                             Show this help message
+  --version                          Show command version
+EOF
+}
+
+get_cpu_info() {
+    lscpu | awk -F: '/Model name|CPU\(s\)|Socket\(s\)|Core\(s\) per socket|Thread\(s\) per core|CPU MHz/ {printf "%s:%s\n", $1, $2}'
+}
+
+get_memory_info() {
+    free -h
+}
+
+create_user() {
+    if [ -z "$1" ]; then
+        printf "Error: Username required\n" >&2
+        exit 1
+    fi
+    useradd -m -s /bin/bash "$1" && printf "User %s created. Please set the password:\n" "$1"
+    passwd "$1"
+}
+
+user_list() {
+    if [ "$1" = "--sudo-only" ]; then
+        awk -F: '($3 >= 1000 && $3 < 60000) {print $1}' /etc/passwd | xargs -I {} sh -c 'id -nG {} | grep -qw sudo && echo {}'
+    else
+        awk -F: '($3 >= 1000 && $3 < 60000) {print $1}' /etc/passwd
+    fi
+}
+
+file_getinfo() {
+    local filename="$1"
+
+    if [ ! -f "$filename" ]; then
+        printf "Error: File does not exist or is not a regular file\n" >&2
+        exit 1
+    fi
+
+    case "$FILE_OPTS" in
+        --size|-s) stat -c "%s" "$filename" ;;
+        --permissions|-p) stat -c "%a" "$filename" ;;
+        --owner|-o) stat -c "%U" "$filename" ;;
+        --last-modified|-m) stat -c "%y" "$filename" ;;
+        "")
+            printf "File: %s\nAccess: %s\nSize(B): %s\nOwner: %s\nModify: %s\n" \
+                "$filename" "$(stat -c "%a" "$filename")" "$(stat -c "%s" "$filename")" "$(stat -c "%U" "$filename")" "$(stat -c "%y" "$filename")"
+            ;;
+        *)
+            printf "Error: Invalid option for file getinfo\n" >&2
+            exit 1
+            ;;
+    esac
+}
+
+case "$1" in
+    --help) help ;;
+    --version) printf "internsctl %s\n" "$VERSION" ;;
+    cpu) [ "$2" = "getinfo" ] && get_cpu_info || help ;;
+    memory) [ "$2" = "getinfo" ] && get_memory_info || help ;;
+    user)
+        case "$2" in
+            create) create_user "$3" ;;
+            list) user_list "$3" ;;
+            *) help ;;
+        esac
+        ;;
+    file)
+        case "$2" in
+            getinfo)
+                FILE_OPTS=""
+                FILE_PATH=""
+
+                if [ -n "$4" ]; then
+                    FILE_OPTS="$3"
+                    FILE_PATH="$4"
+                else
+                    FILE_PATH="$3"
+                fi
+                file_getinfo "$FILE_PATH"
+                ;;
+            *) help ;;
+        esac
+        ;;
+    *)
+        printf "Unknown command: %s\n" "$1" >&2
+        help
+        exit 1
+        ;;
+esac
