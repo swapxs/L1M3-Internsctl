@@ -1,4 +1,4 @@
-internsctl(1)                                                                          User Commands                                                                         internsctl(1)
+internsctl(1)                 User Commands                     internsctl(1)
 
 NAME
        internsctl - a custom linux command for sysadmin operations
@@ -7,7 +7,8 @@ SYNOPSIS
        internsctl [COMMAND] [OPTIONS]
 
 DESCRIPTION
-       internsctl is a tool to manage CPU and memory information, create and list users, and get file information.
+       internsctl is a tool to manage CPU and memory information, create and
+       list users, and get file information.
 
 COMMANDS
        cpu getinfo
@@ -79,6 +80,7 @@ BUGS
        Report bugs to swapnil.bhowmik@xenonstack.com
 
 COPYRIGHT
-       This is free software; you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law.
+       This is free software; you are free to change and redistribute it. There
+       is NO WARRANTY, to the extent permitted by law.
 
-internsctl v0.1.0                                                                      February 2025                                                                         internsctl(1)
+internsctl v0.1.0               February 2025                      internsctl(1)
