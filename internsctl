@@ -27,15 +27,15 @@ Other:
 EOF
 }
 
-get_cpu_info() {
+cpu_getinfo() {
     lscpu | awk -F: '/Model name|CPU\(s\)|Socket\(s\)|Core\(s\) per socket|Thread\(s\) per core|CPU MHz/ {printf "%s:%s\n", $1, $2}'
 }
 
-get_memory_info() {
+memory_getinfo() {
     free -h
 }
 
-create_user() {
+user_create() {
     if [ -z "$1" ]; then
         printf "Error: Username required\n" >&2
         exit 1
@@ -46,6 +46,7 @@ create_user() {
 
 user_list() {
     if [ "$1" = "--sudo-only" ]; then
+        # awk -F: '($3 >= 1000 && $3 < 60000) {print $1}' /etc/passwd | xargs -I {} sh -c 'id -nG {} | echo {}'
         awk -F: '($3 >= 1000 && $3 < 60000) {print $1}' /etc/passwd | xargs -I {} sh -c 'id -nG {} | grep -qw sudo && echo {}'
     else
         awk -F: '($3 >= 1000 && $3 < 60000) {print $1}' /etc/passwd
@@ -79,11 +80,11 @@ file_getinfo() {
 case "$1" in
     --help) help ;;
     --version) printf "internsctl %s\n" "$VERSION" ;;
-    cpu) [ "$2" = "getinfo" ] && get_cpu_info || help ;;
-    memory) [ "$2" = "getinfo" ] && get_memory_info || help ;;
+    cpu) [ "$2" = "getinfo" ] && cpu_getinfo || help ;;
+    memory) [ "$2" = "getinfo" ] && memory_getinfo || help ;;
     user)
         case "$2" in
-            create) create_user "$3" ;;
+            create) user_create "$3" ;;
             list) user_list "$3" ;;
             *) help ;;
         esac
