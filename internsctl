@@ -1,6 +1,6 @@
 #!/bin/sh
-
 VERSION="v0.1.0"
+
 FILE_OPTS=""
 FILE_PATH=""
 
@@ -40,7 +40,7 @@ user_create() {
         printf "Error: Username required\n" >&2
         exit 1
     fi
-    useradd -m -s /bin/bash "$1" && printf "User %s created. Please set the password:\n" "$1"
+    useradd -m -s $(which bash) "$1" && printf "User %s created. Please set the password:\n" "$1"
     passwd "$1"
 }
 
@@ -63,15 +63,16 @@ file_getinfo() {
 
     case "$FILE_OPTS" in
         --size|-s) stat -c "%s" "$filename" ;;
-        --permissions|-p) stat -c "%a" "$filename" ;;
+        --permissions|-p) stat -c "%A" "$filename" ;;
         --owner|-o) stat -c "%U" "$filename" ;;
         --last-modified|-m) stat -c "%y" "$filename" ;;
         "")
             printf "File: %s\nAccess: %s\nSize(B): %s\nOwner: %s\nModify: %s\n" \
-                "$filename" "$(stat -c "%a" "$filename")" "$(stat -c "%s" "$filename")" "$(stat -c "%U" "$filename")" "$(stat -c "%y" "$filename")"
+                "$filename" "$(stat -c "%A" "$filename")" "$(stat -c "%s" "$filename")" "$(stat -c "%U" "$filename")" "$(stat -c "%y" "$filename")"
             ;;
         *)
             printf "Error: Invalid option for file getinfo\n" >&2
+            help
             exit 1
             ;;
     esac
