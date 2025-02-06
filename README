@@ -1,0 +1,84 @@
+internsctl(1)                                                                          User Commands                                                                         internsctl(1)
+
+NAME
+       internsctl - a custom linux command for sysadmin operations
+
+SYNOPSIS
+       internsctl [COMMAND] [OPTIONS]
+
+DESCRIPTION
+       internsctl is a tool to manage CPU and memory information, create and list users, and get file information.
+
+COMMANDS
+       cpu getinfo
+              Display CPU information (simplified output).
+
+       memory getinfo
+              Display memory information (equivalent to free).
+
+       user create NAME
+              Create a new user with the specified name.
+
+       user list [--sudo-only]
+              List all users or only those with sudo privileges.
+
+       file getinfo [OPTIONS] FILE-NAME
+              Get information about a file.
+
+OPTIONS FOR 'file getinfo'
+       --size, -s
+              Show file size.
+
+       --permissions, -p
+              Show file permissions.
+
+       --owner, -o
+              Show file owner.
+
+       --last-modified, -m
+              Show last modified time.
+
+OTHER OPTIONS
+       --help Show this help message.
+
+       --version
+              Show command version.
+
+EXAMPLES
+       internsctl cpu getinfo
+              Display CPU information.
+
+       internsctl memory getinfo
+              Display memory information.
+
+       internsctl user create alice
+              Create a new user named "alice".
+
+       internsctl user list
+              List all users.
+
+       internsctl user list --sudo-only
+              List users with sudo privileges.
+
+       internsctl file getinfo --size myfile.txt
+              Show the size of "myfile.txt".
+
+       internsctl file getinfo --permissions myfile.txt
+              Show the permissions of "myfile.txt".
+
+       internsctl file getinfo --owner myfile.txt
+              Show the owner of "myfile.txt".
+
+       internsctl file getinfo --last-modified myfile.txt
+              Show the last modified time of "myfile.txt".
+
+AUTHOR
+       Written by Swapnil Bhowmik
+
+BUGS
+       Report bugs to swapnil.bhowmik@xenonstack.com
+
+COPYRIGHT
+       This is free software; you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law.
+
+internsctl v0.1.0                                                                      February 2025                                                                         internsctl(1)
